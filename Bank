@@ -1,0 +1,299 @@
+import java.util.*;
+
+public class Bank {
+				private ArrayList <Account> arrayList;
+				private static double totalAmountInSavingsAccts ;
+				private static double totalAmountInCheckingAccts;
+				private static double totalAmountInCDAcct;
+				private static double totalAmountInAllAccts;
+				
+
+				
+		public Bank (ArrayList <Account> a, double b, double c, double d, double e) {
+			arrayList=a;
+			totalAmountInSavingsAccts=b;
+			totalAmountInCheckingAccts=c;
+			totalAmountInCDAcct=d;
+			totalAmountInAllAccts=e;}
+		
+		
+		public Bank (ArrayList <Account> a) {
+			arrayList=a;}
+	
+		public Bank() {
+			arrayList= new ArrayList<>();}
+		
+		public Bank(Bank a) {
+			arrayList=a.arrayList;}
+		
+		
+		public int findAccount(ArrayList <Account> accountList, int reqAccount) {
+			
+			//Method: findAccounts
+			/*Input:
+			 * accountList- references the account object arrayList
+			 * reqAccount- the account that needs to be checked
+			 * Process:
+			 * The program takes an index of the account number entered
+			 * checks if the account appears in the array
+			 * Output:
+			 * returns the index number if valid
+			 * returns a -1 if invalid
+			 */
+	
+		for( int count=0; count<accountList.size(); count++) {
+		if ((accountList.get(count)).equals(reqAccount)){
+			return count;}}
+		
+		return -1;}
+	
+		public TransactionReceipt openNewAccount(ArrayList <Account> accountList, TransactionTicket ticket,
+																TransactionReceipt receipt, int reqAccount, String firstName, 
+																String lastName, String ssn, String acctType) {
+			
+			//Method: openNewAccount
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * reqAccount- the new account number
+			 * firstName- the new first name of the account
+			 * lastName- the new last Name of the account
+			 * ssn- the consumers ssn
+			 * acctType- the type of account being opened
+			 * Process:
+			 * the program creates a new account object
+			 * and fills the data members using the parametized constructors
+			 *it adds the account to the arrayList
+			 * to fill out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+			
+			Calendar calendar= Calendar.getInstance();
+			ArrayList <TransactionReceipt> receiptData= new ArrayList<>();
+			Name newName= new Name(firstName, lastName);
+			Depositor newDepositor= new Depositor(newName, ssn);
+			
+			//Account newAccount= new Account(newDepositor, reqAccount, acctType, "open",0.0,receiptData);
+			if (acctType.equals("CD")) {
+				calendar.add(Calendar.MONTH, ticket.getTerm());
+				CDAccount account= new CDAccount(newDepositor, reqAccount, acctType, "open",0.0,calendar, receiptData);
+				Account newAccount=account;
+				accountList.add(newAccount);
+				receipt= new TransactionReceipt(ticket, true, "Account Created", 0,0, calendar);
+				newAccount.addTransaction(receipt);
+				}
+			else if (acctType.equals("Savings")) {
+				SavingsAccount account= new SavingsAccount(newDepositor, reqAccount, acctType, "open",0.0,receiptData);
+				Account newAccount=account;
+				accountList.add(newAccount);
+				receipt= new TransactionReceipt(ticket, true, "Account Created", 0,0, calendar);
+				newAccount.addTransaction(receipt);}
+				
+			else { 
+				CheckingAccount account= new CheckingAccount(newDepositor, reqAccount, acctType, "open",0.0,receiptData);
+				Account newAccount=account;
+				accountList.add(newAccount);
+				receipt= new TransactionReceipt(ticket, true, "Account Created", 0,0, calendar);
+				newAccount.addTransaction(receipt);
+				}
+				
+			return receipt= new TransactionReceipt(receipt);}
+	
+
+		public TransactionReceipt deleteAccount(Bank bank, ArrayList <Account> accountList, TransactionTicket ticket,
+															TransactionReceipt receipt, int index) {
+			
+			//Method: deleteAccount
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * reqAccount- the account number to be checked
+			 * Process:
+			 * the program creates a searches for the account
+			 * if it doesnt exist, it prints an error message
+			 * otherwise, it checks if the account is empty
+			 * if not, it prints an error message
+			 * otherwise it removes the account from the arraylist 
+			 * fills out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+		
+	
+			
+			Account temp= new Account(accountList.get(index));
+			
+					if (temp.getBalance()!=0) {
+						receipt= new TransactionReceipt(ticket, false, "Account is not empty.", ticket.getDate());
+						return receipt= new TransactionReceipt(receipt);}
+					
+					else accountList.remove(index);
+						receipt= new TransactionReceipt(ticket, true, "Account Deleted", ticket.getDate());
+						return receipt= new TransactionReceipt(receipt);}
+		
+		public TransactionReceipt accountInfo(ArrayList <Account> accountList, TransactionTicket ticket,
+														TransactionReceipt receipt, String social) {
+			
+			//Method: accountInfo
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * social- the requested social security number
+			 * Process:
+			 * the program searches for the ssn
+			 * if it doesnt find one, returns an error
+			 * otherwise, returns receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+			
+			int index=-1;
+			for( int count=0; count<accountList.size(); count++) {
+					if (accountList.get(count).getDepositor().equals(social)) {
+						index= count;}}
+			
+			
+			if (index==-1) {
+				receipt= new TransactionReceipt(ticket, false, "No account exists for SSN", ticket.getDate());
+				return receipt= new TransactionReceipt();}
+			
+			else receipt= new TransactionReceipt(ticket, true, "Accounts Exist", ticket.getDate());
+					return receipt= new TransactionReceipt(receipt);}
+			
+		
+		
+		public static void totals(Bank bank) {
+			//Method: totals
+			/* Input: 
+			 * bank- references the Bank object
+			 * Process:
+			 * runs a loop of all the account
+			 * adds the balance of every account to its respective static member
+			 * Output:
+			 * none
+			 */
+			
+			
+			ArrayList <Account> accountList= new ArrayList<>(bank.getList());
+			
+			double checkTotal=0;
+			double savingsTotal=0;
+			double cdTotal=0;
+			double arrayTotal=0;
+			
+			for (int count=0; count<accountList.size(); count++) {				
+				Account temp= (Account)accountList.get(count);
+				arrayTotal+=temp.getBalance();
+				
+				if (temp.getAccountType().contentEquals("Savings")){
+					savingsTotal+=temp.getBalance();}
+				
+				else if (temp.getAccountType().contentEquals("Checking")){
+					checkTotal+=temp.getBalance();}
+				
+				else if (temp.getAccountType().contentEquals("CD")){
+					cdTotal+=temp.getBalance();}}
+			
+			bank= new Bank(accountList, savingsTotal, checkTotal, cdTotal, arrayTotal);}
+		
+		public void changeDatabase(ArrayList <Account> list, int index, Account temp) {
+			
+			//Method: changeDatabase
+			/* Input: 
+			 * list- this is a reference to the account object arraylist
+			 * index- the position of the account in the arry
+			 * temp- refernces the account object
+			 * Process:
+			 * program changes the account at the index to the accounnt listed
+			 * Output:none
+			 * 
+			 */
+			
+			list.set(index, temp);}
+		
+		
+			
+		
+		
+		public int getNumAccts() {
+			return arrayList.size();}
+		
+		public Account getAccts(int a) {
+			return new Account(arrayList.get(a));}
+		
+		public ArrayList<Account> getList() {
+			return arrayList;}
+		
+		public static double getTotalSav() {
+			//Method: getTotalSav
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the total in Savings accounts
+			 * Output:
+			 * returns the total in Savings accounts
+			 */
+			return totalAmountInSavingsAccts;}
+		
+		public static double getTotalCheck() {
+			//Method: getTotalCheck
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the total in Checking accounts
+			 * Output:
+			 * returns the total in Checking
+			 *  accounts
+			 */
+			
+			return totalAmountInCheckingAccts;}
+		
+		public static double getTotalCD() {
+			//Method: getTotalCD
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the total in CD accounts
+			 * Output:
+			 * returns the total in CD accounts
+			 */
+			return totalAmountInCDAcct;}
+		
+		public static double getTotal() {
+			//Method: getTotal
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the total
+			 * Output:
+			 * returns the total
+			 */
+			return totalAmountInAllAccts;}
+		
+		
+		public String toString() {
+			//Method: toString
+			/* Input: 
+			 * Process:
+			 * creates a string, formatted to print
+			 * Output:
+			 * returns string
+			 */
+			String str="\nTotal Amount in Savings Accounts: $" + totalAmountInSavingsAccts + 
+						"\nTotal Amount in Checking Accounts: $" + totalAmountInCheckingAccts + 
+						"\nTotal Amount in CD Accounts: $" + totalAmountInCDAcct + 
+						"\nTotal Amount in All Accounts: $" + totalAmountInAllAccts;
+			return str;}
+		}
+		
+
+		
+
+
+		
