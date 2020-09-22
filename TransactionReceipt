@@ -1,0 +1,139 @@
+import java.util.*;
+
+public class TransactionReceipt extends genTransactionReceipt{
+				private TransactionTicket ticket;
+				private boolean successIndicatorFlag;
+				private String reasonForFailure;
+				private double preBalance;
+				private double postBalance;
+				private Calendar postMaturityDate;
+		
+public TransactionReceipt(TransactionTicket a, boolean b, String c, Calendar d) {
+	ticket=a;
+	successIndicatorFlag=b;
+	reasonForFailure=c;
+	postMaturityDate=d;}
+
+public TransactionReceipt(TransactionTicket a, boolean b, double c, double d, Calendar e) {
+	ticket= a;
+	successIndicatorFlag=b;
+	preBalance=c;
+	postBalance=d;
+	postMaturityDate=e;}
+
+public TransactionReceipt(TransactionTicket a, boolean b, String b2, double c, double d, Calendar e) {
+	ticket= a;
+	successIndicatorFlag=b;
+	reasonForFailure= b2;
+	preBalance=c;
+	postBalance=d;
+	postMaturityDate=e;}
+
+public TransactionReceipt(TransactionReceipt a) {
+	ticket= new TransactionTicket(a.ticket);
+	successIndicatorFlag=a.successIndicatorFlag;
+	reasonForFailure= a.reasonForFailure;
+	preBalance=a.preBalance;
+	postBalance= a.postBalance;
+	postMaturityDate=a.postMaturityDate;}
+
+
+public TransactionReceipt() {
+	ticket=new TransactionTicket();
+	successIndicatorFlag= false;
+	reasonForFailure="";
+	preBalance=0;
+	postBalance=0;
+	postMaturityDate= Calendar.getInstance();
+	postMaturityDate.clear();}
+
+
+public TransactionTicket getTicket() {
+	//Method: getTicket
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the ticket
+	 * Output:
+	 * returns the ticket
+	 */
+
+	return new TransactionTicket(ticket);}
+
+public boolean getSuccessIndicator() {
+	//Method: getSuccessIndicator
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the success indicator boolean
+	 * Output:
+	 * returns the success indicator boolean
+	 */
+
+	return successIndicatorFlag;}
+
+public String getReason() {
+	//Method: getReason
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the reason for failure
+	 * Output:
+	 * returns the reason for failure
+	 */
+
+	return reasonForFailure;}
+
+public double getPreBalance() {
+	//Method: getPreBalance
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the pre-transaction balance
+	 * Output:
+	 * returns the pre-transaction balance
+	 */
+
+	return preBalance;}
+
+public double getPostBalance() {
+	//Method: getPostBalance
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the post-transaction balance
+	 * Output:
+	 * returns the post-transaction balance
+	 */
+
+	return  postBalance;}
+
+public Calendar getPostDate() {
+	//Method: getPostDate
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the post-transaction maturity date
+	 * Output:
+	 * returns the post transaction maturity date
+	 */
+
+	return postMaturityDate;}
+
+
+public String toString() {
+	String str= String.format("%-17s%4.2f\n%-17s%4.2f", 
+			"Previous Balance: $",
+			preBalance, 
+			"Current Balance: $",
+			postBalance);
+	return str;}
+
+public String toString(String a) {
+	String str=String.format("%6d%1s%2d%1s%4d", postMaturityDate.get(Calendar.MONTH)+1,"/",
+			postMaturityDate.get(Calendar.DATE), "/",
+			postMaturityDate.get(Calendar.YEAR));
+	return str;}}
+
+
+
