@@ -1,0 +1,16 @@
+public abstract class genName {
+				private String first;
+				private String last;
+				
+				
+				
+				protected abstract void setFirst(String a);
+				
+				protected abstract void setLast(String a);
+				
+				public abstract String getFirst();
+				
+				public abstract String getLast() ;
+				
+				
+}
