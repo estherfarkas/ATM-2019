@@ -1,0 +1,13 @@
+public abstract class genDepositor {
+	private Name names;
+	private String ssn;
+	
+	
+	protected abstract void setName(Name input);
+	
+	protected abstract void setSsn(String input);
+	
+	public abstract Name getName();
+	
+	public abstract String getSsn();
+}
