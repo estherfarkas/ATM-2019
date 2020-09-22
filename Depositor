@@ -1,0 +1,84 @@
+public class Depositor extends genDepositor{
+				private Name names;
+				private String ssn;
+				
+				
+		public Depositor(Name a, String b) {
+			names= a;
+			ssn=b;}
+		
+		public Depositor(Depositor a) {
+			names= new Name(a.getName().getFirst(), a.getName().getLast());
+			ssn= a.getSsn();}
+	
+		public Depositor() {
+			names= new Name();
+			ssn="";}
+		
+		protected void setName(Name input) {
+			//Method: setName
+			/* Input: 
+			 * input- the new name
+			 * Process:
+			 * sets the name to input
+			 * Output:
+			 * none
+			 */
+
+			names=input;}
+		
+		protected void setSsn(String input) {
+			//Method: setSsn
+			/* Input: 
+			 * input- the new ssn
+			 * Process:
+			 * sets the ssn to input
+			 * Output:
+			 * none
+			 */
+
+			ssn=input;}
+		
+		public Name getName() {
+			//Method: getName
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the Name names
+			 * Output:
+			 * returns the Name names
+			 */
+			return new Name(names);}
+		
+		public String getSsn() {
+			//Method: getSsn
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the ssn
+			 * Output:
+			 * returns the ssn
+			 */
+			return ssn;}
+		
+		public boolean equals(Depositor depositor) {
+			if (names.equals(depositor.getName())&&
+				ssn.equals(depositor.getSsn())){
+				return true;}
+			else return false;}
+	
+		public boolean equals(String social) {
+			if (social.equals(ssn)) {
+				return true;}
+			else return false;}
+		
+		public String toString(String a) {
+			
+			String str=(names + " " + ssn);
+			return str;}
+		
+		public String toString() {
+			String str=(names + "\n" + ssn);
+			return str;
+		}
+}
