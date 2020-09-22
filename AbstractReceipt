@@ -1,0 +1,19 @@
+import java.util.Calendar;
+
+public abstract class genTransactionReceipt {
+	private TransactionTicket ticket;
+	private boolean successIndicatorFlag;
+	private String reasonForFailure;
+	private double preBalance;
+	private double postBalance;
+	private Calendar postMaturityDate;
+	
+	
+	public abstract TransactionTicket getTicket() ;
+	public abstract boolean getSuccessIndicator() ;
+
+	public abstract String getReason() ;
+
+	public abstract double getPreBalance();
+		
+	public abstract Calendar getPostDate() ;
