@@ -1,0 +1,71 @@
+import java.util.*;
+
+	public class Check {
+		private int accountNum;
+		private double checkAmount;
+		private Calendar dateOfCheck;
+	
+
+	public Check(int a, double b, Calendar c) {
+			accountNum= a;
+			checkAmount=b;
+			dateOfCheck= c;}
+	
+	public Check(int a, double b) {
+		accountNum= a;
+		checkAmount=b;}
+
+
+	public Check() {
+			accountNum= 0;
+			checkAmount=0;
+			dateOfCheck=Calendar.getInstance();
+			dateOfCheck.clear();}
+	
+	public Check (Check a) {
+		accountNum= a.getAccount();
+		checkAmount=a.getAmount();
+		dateOfCheck=a.getDate();}
+
+public int getAccount() {
+	//Method: getAccount
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the account
+	 * Output:
+	 * returns the account
+	 */
+	return accountNum;}
+
+public double getAmount() {
+	//Method: getAmount
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the amount
+	 * Output:
+	 * returns the amount
+	 */
+	return checkAmount;}
+
+public Calendar getDate() {
+	//Method: getDate
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the date
+	 * Output:
+	 * returns the date
+	 */
+	return dateOfCheck;}
+
+public String toString() {
+	String str="\nAccount Requested: " + accountNum+ 
+				"\nCheck Amount: $" + checkAmount +
+				"\nCheck Date: "+ dateOfCheck.get(Calendar.MONTH)+1 + "/"+
+			dateOfCheck.get(Calendar.DATE)+ "/"+dateOfCheck.get(Calendar.YEAR);
+	return str;
+}
+
+}
