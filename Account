@@ -1,0 +1,381 @@
+import java.util.*;
+
+public class Account extends genAccount{
+		private Depositor depositor;
+		private int accountNum;
+		private String accountType;
+		private String status;
+		protected double balance;
+		private ArrayList <TransactionReceipt> receiptData;
+		
+		
+		
+		public Account(Depositor a, int b, String c, String d, Double e, /*Calendar f,*/ ArrayList<TransactionReceipt>  g) {
+			//Paraemetized Constuctor
+			depositor= a;
+			accountNum=b;
+			accountType=c;
+			status=d;
+			balance=e;
+			//date= f;
+			receiptData=g;}
+		
+		
+		public Account() { //No Args constructor
+			depositor= new Depositor();
+			accountNum=0;
+			accountType="";
+			status="";
+			balance=0.0;
+			//date= Calendar.getInstance();
+			//date.clear();
+			}
+		
+		
+		public Account(Account a) { //Copy Constructor
+			receiptData= a.getHistory();
+			depositor= new Depositor(a.getDepositor().getName(), a.getDepositor().getSsn());
+			accountNum=a.getAccountNum();
+			accountType=a.getAccountType();
+			status=a.getStatus();
+			balance=a.getBalance();
+			//date= a.getDate();
+			}
+		
+		
+		
+		protected void setStatus(String input) {
+			//Method: setStatus
+			/* Input: 
+			 * input- the new status
+			 * Process:
+			 * sets the status to input
+			 * Output:
+			 * none
+			 */
+			status=input;}
+		
+		//public void setDate(Calendar input) {
+			//Method: setDate
+			/* Input: 
+			 * input- the new date
+			 * Process:
+			 * sets the calendar date to input
+			 * Output:
+			 * none
+			 */
+			
+			//date=input;}
+		
+		
+		public TransactionReceipt shutAccount(Bank bank, ArrayList <Account> accountList, TransactionTicket ticket,
+				TransactionReceipt receipt, int reqAccount) {
+			
+			//Method: shutAccount
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * reqAccount- the requested account number
+			 * Process:
+			 * the program searches for the account using findAccounts
+			 * if it doesnt find one, returns an error
+			 * otherwise, returns the account index
+			 * creates copy account
+			 * if the account is closed, returns an error receipt
+			 * otherwise it closes the account
+			 * fills out the transaction receipt
+			 * sends to bank to reenter the database
+			 * Output:
+			 * program prints transaction receipt
+			 */
+
+			int index=bank.findAccount(accountList, reqAccount);
+			Calendar cal= Calendar.getInstance();
+			
+			if (index==-1) {
+			receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());
+			return receipt= new TransactionReceipt(receipt);}
+			
+			else {Account temp= new Account(accountList.get(index));
+			
+			if (temp.getStatus().contentEquals("closed")) {
+				receipt= new TransactionReceipt(ticket, false, "Account is already closed.",
+							temp.getBalance(), temp.getBalance(), ticket.getDate());	
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				return receipt= new TransactionReceipt(receipt);}
+			
+			else temp.setStatus("closed");
+					receipt= new TransactionReceipt(ticket, true, "Account Closed",
+							temp.getBalance(), temp.getBalance(), ticket.getDate());
+					temp.addTransaction(receipt);
+					bank.changeDatabase(accountList,index, temp);
+					return receipt= new TransactionReceipt(receipt);}}
+		
+		public TransactionReceipt reopenAccount(Bank bank, ArrayList <Account> accountList, TransactionTicket ticket,
+				TransactionReceipt receipt, int reqAccount) {
+			
+			//Method: reOpenAccount
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * reqAccount- the requested account number
+			 * Process:
+			 * the program searches for the account using findAccounts
+			 * if it doesnt find one, returns an error
+			 * otherwise, returns the account index
+			 * creates an account copy
+			 * if the account is open, returns an error receipt
+			 * otherwise it reopens the account
+			 * fills out the transaction receipt
+			 * send to bank to add to database
+			 * Output:
+			 * program prints transaction receipt
+			 */
+
+			int index=bank.findAccount(accountList, reqAccount);
+			
+			if (index==-1) {
+			receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());
+			return receipt= new TransactionReceipt(receipt);}
+			
+			else {Account temp= new Account(accountList.get(index));
+			
+			if (temp.getStatus().contentEquals("open")) {
+				receipt= new TransactionReceipt(ticket, false, "Account is already open.",
+						temp.getBalance(), temp.getBalance(), ticket.getDate());	
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				return receipt= new TransactionReceipt(receipt);}
+			
+			else temp.setStatus("open");
+					receipt= new TransactionReceipt(ticket, true, "Account Open",
+							temp.getBalance(), temp.getBalance(), ticket.getDate());
+					temp.addTransaction(receipt);
+					bank.changeDatabase(accountList,index, temp);
+					return receipt= new TransactionReceipt(receipt);}}
+		
+		
+			
+		public TransactionReceipt getHistory(Bank bank, ArrayList <Account> accountList, TransactionTicket ticket,
+														TransactionReceipt receipt, int reqAccount) {
+			
+			//Method: balanceInquiry
+			/* Input: 
+			 * accountList- this is a reference to the account object arraylist
+			 * ticket- reference to the TransactionTicket object 
+			 * receipt- references the TransactionReceipt object
+			 * reqAccount- the requested account number
+			 * Process:
+			 * the program searches for the account using findAccounts
+			 * if it doesnt find one, returns an error receipt
+			 * creates copy account
+			 * otherwise, returns the account index
+			 * fills out the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+			
+			int index=bank.findAccount(accountList, reqAccount);
+			if (index==-1) {
+				receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());
+				return receipt= new TransactionReceipt(receipt);}
+			
+			else {receipt= new TransactionReceipt(ticket, true , "Account History", ticket.getDate());
+			return receipt= new TransactionReceipt(receipt);}
+			
+			
+			
+			
+		}
+		
+		
+		public TransactionReceipt balanceInquiry(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {return receipt;}
+		
+		public TransactionReceipt makeWithdrawal(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {return receipt;}
+		
+		public TransactionReceipt makeDeposit(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {return receipt;}
+		
+		public Calendar getDate() {
+			return Calendar.getInstance();}
+		
+		public TransactionReceipt clearCheck(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, TransactionTicket ticket, 
+				Check check, int index) {return receipt;}
+		
+		
+		
+		
+
+		public double getBalance() {
+			//Method: getBalance
+			/* Input: 
+			 * 
+			 * Process:
+			 * returns the balance
+			 * Output:
+			 * returns the balance
+			 */
+
+			return balance;}
+		
+		public int getAccountNum() {
+			//Method: getAccountNum
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the account number
+			 * Output:
+			 * returns the account number
+			 */
+			return accountNum;}
+		
+		public String getAccountType() {
+			//Method: getAccountType
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the account type
+			 * Output:
+			 * returns the account type
+			 */
+			return accountType;}
+		
+		public String getStatus() {
+			//Method: getStatus
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the account status
+			 * Output:
+			 * returns the account status
+			 */
+			return status;}
+		
+				
+		public Depositor getDepositor() {
+			//Method: getDepositor
+			/* Input: 
+			 * none
+			 * Process:
+			 * returns the depositor
+			 * Output:
+			 * returns the depositor
+			 */
+			return new Depositor(depositor);}
+
+		
+		
+		public ArrayList<TransactionReceipt> getHistory(){
+			
+			//Method: getHistory
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the arraylist receiptData
+			 * Output:
+			 * returns the arraylist receiptData
+			 */
+			
+			return receiptData;}
+		
+		public void addTransaction(TransactionReceipt a) {
+			//Method: addTransaction
+			/* Input: 
+			 * a- referecen to the receipt to be added
+			 * Process:
+			 * adds a to the arraylist
+			 * Output:
+			 * none
+			 */
+			
+			receiptData.add(a);}
+		
+		public boolean equals(Account account) {
+			//Method: equals
+			/* Input: 
+			 * account- the account to be checked
+			 * Process:
+			 * checks if the the two accounts have equal content
+			 * Output:
+			 * returns true or false
+			 */
+			if (depositor.equals(account.getDepositor())&&
+				accountNum==account.getAccountNum()&&
+				accountType.equals(account.getAccountType())){
+				
+				return true;}
+			else return false;}	
+			
+		public boolean equals(int reqAccount) {
+			//Method: equals
+			/* Input: 
+			 * reqAccount- the account to be checked
+			 * Process:
+			 * checks if the the two accounts have equal content
+			 * Output:
+			 * returns true or false
+			 */
+			if (accountNum==reqAccount) {
+				return true;}
+			else return false;}
+		
+		public boolean equals(String type) {
+			//Method: equals
+			/* Input: 
+			 * type- the type of account to be checked
+			 * Process:
+			 * checks if the the two accounts have equal type
+			 * Output:
+			 * returns true or false
+			 */
+			if (accountType.equals(type)){
+				return true;}
+			else return false;}
+		
+		public String toString() {
+			//Method: toString
+			/* Input: 
+			 * Process:
+			 * creates a string, formatted to print
+			 * Output:
+			 * returns string
+			 */
+			String str=String.format("%-12s%-12s%-12s%-15s%-15s%-15s%-12s%-15s",
+					 "Name", "Last", 
+					"Social", "Account Number","Account type", "Account Status" ,"Balance", "Maturity Date");
+					return str;}
+		
+		
+		public String toString(int a) {
+			String str =String.format("\n%-12s%-12s%-12s%-15d%-15s%-15s%-12.2f",
+					depositor.getName().getFirst(),
+					depositor.getName().getLast(), 
+					depositor.getSsn(),
+					accountNum,
+					accountType,
+					status,
+					balance
+					);
+			
+			return str;}
+		
+		public String toString(String a) {
+			return a;}
+
+		
+		
+			}
+		
+		
