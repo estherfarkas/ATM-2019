@@ -1,0 +1,95 @@
+import java.util.*;
+
+public class TransactionTicket extends genTransactionTicket{
+				private Calendar dateOfTransaction;
+				private String typeOfTransaction;
+				private double amountOfTransaction;
+				private int termOfCD;
+				
+
+
+public TransactionTicket(Calendar a, String b, double c) {
+	dateOfTransaction=a;
+	typeOfTransaction=b;
+	amountOfTransaction=c;}
+
+public TransactionTicket(Calendar a, String b) {
+	dateOfTransaction=a;
+	typeOfTransaction=b;}
+
+public TransactionTicket(Calendar a, String b, double c, int d) {
+	dateOfTransaction=a;
+	typeOfTransaction=b;
+	amountOfTransaction=c;
+	termOfCD= d;}
+
+public TransactionTicket() {
+	dateOfTransaction=Calendar.getInstance();
+	dateOfTransaction.clear();
+	typeOfTransaction="";
+	amountOfTransaction=0;
+	termOfCD=0;}
+
+public TransactionTicket(TransactionTicket a) {
+	dateOfTransaction=a.dateOfTransaction;
+	typeOfTransaction=a.typeOfTransaction;
+	amountOfTransaction=a.amountOfTransaction;
+	termOfCD=a.termOfCD;}
+
+public Calendar getDate() {
+	//Method: getDate
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the date
+	 * Output:
+	 * returns the date
+	 */
+	return dateOfTransaction;}
+
+public String getType() {
+	//Method: getType
+	/* Input: 
+	 * none
+	 * Process
+	 * return the type of transaction
+	 * Output:
+	 * returns the type of transaction
+	 */
+	return typeOfTransaction;}
+
+public double getAmount() {
+	//Method: getAmount
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the amount of transaction
+	 * Output:
+	 * returns the amount of transaction
+	 */
+	return amountOfTransaction;}
+
+public int getTerm() {
+	//Method: getTerm
+	/* Input: 
+	 * none
+	 * Process:
+	 * return the term of CD
+	 * Output:
+	 * returns the term of CD
+	 */
+	return termOfCD;}
+
+public String toString() {
+	String str= "\nDate: " + dateOfTransaction.getTime()+ "\nTransaction: " + typeOfTransaction;
+	return str;}
+
+
+public String toString(int a) {
+	String str= "\nDate: " + dateOfTransaction.getTime()+ 
+			"\nTransaction: " + typeOfTransaction +
+			"\nAccount Number: " + a;
+	return str;}
+}
+
+
