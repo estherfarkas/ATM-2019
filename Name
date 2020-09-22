@@ -1,0 +1,81 @@
+public class Name extends genName{
+				private String first;
+				private String last;
+				
+		public Name(String a, String b) {
+			first=a;
+			last=b;}
+		
+		public Name() {
+			first= "";
+			last="";}
+		
+		public Name(Name a) {
+		first= a.getFirst();
+		last= a.getLast();}
+		
+		protected void setFirst(String a) {
+			//Method: setFirst
+			/* Input:
+			 * a- the first name
+			 * Process:
+			 * sets the first name to a
+			 * Output:
+			 * none
+			 */
+			first=a;}
+		
+		protected void setLast(String a) {
+			//Method: setLast
+			/* Input:
+			 * a- the last name
+			 * Process:
+			 * sets the last name to a
+			 * Output:
+			 * none
+			 */
+			last=a;}
+		
+		public String getFirst() {
+			//Method: getFirst
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the first name
+			 * Output:
+			 * returns the last name
+			 */
+			return first;}
+		
+		public String getLast() {
+			//Method: getLast
+			/* Input: 
+			 * none
+			 * Process:
+			 * return the last name
+			 * Output:
+			 * returns the last name
+			 */
+			return last;}
+		
+		public boolean equals(Name name) {
+			if (first.equals(name.getFirst())&&
+				last.equals(name.getLast())){
+				return true;}
+			else return false;}
+		
+		public boolean equals(String a, String b) {
+			if ((a.equals(first))&& (b.equals(last))){
+				return true;}
+			else return false;}
+
+		public String toString() {
+			String str= String.format("%-10s%-10s",first,last);
+			return str;}
+		
+		public String toString(int a) {
+			String str="Account Number " + a+ " belongs to " + first + " " + last;
+			return str;}
+		
+}
+
