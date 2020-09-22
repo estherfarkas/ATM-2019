@@ -1,0 +1,15 @@
+import java.util.Calendar;
+
+public abstract class genTransactionTicket {
+	private Calendar dateOfTransaction;
+	private String typeOfTransaction;
+	private double amountOfTransaction;
+	private int termOfCD;
+	
+	
+	public abstract Calendar getDate(); 
+
+	public abstract String getType();
+	public abstract double getAmount();
+	public abstract int getTerm() ;
+}
