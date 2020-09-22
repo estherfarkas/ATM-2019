@@ -1,0 +1,292 @@
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+
+
+Sarah       Jones       845521856   112233         Savings        open           613.56      
+John        Roberts     917649845   456654         Checking       open           17.01       
+Fred        Stevens     641614599   135790         CD             open           314.00           1/ 4/2019
+Melissa     Smith       972003456   222998         Checking       closed         3456.76     
+Brad        Michaels    656443456   909090         Savings        closed         522.76      
+Alice       Peterson    222456565   323433         CD             open           2345.45          9/12/2011
+Max         Adams       098125432   113565         Savings        open           65.56       
+John        Roberts     917649845   113366         CD             closed         45.66            1/ 8/2011
+Janet       Macintosh   122343212   111333         Checking       closed         112.30      
+Richard     James       224567777   119988         Savings        open           321.45      
+Michael     Lopez       333445555   555666         CD             open           2345.60          3/ 3/2020
+Sarah       Jones       845521856   112234         Checking       open           644.56      
+Total Amount in Savings Accounts: $5753.960000000001
+Total Amount in Checking Accounts: $4230.630000000001
+Total Amount in CD Accounts: $5050.709999999999
+Total Amount in All Accounts: $10804.67
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Balance Inquiry
+Account Number: 112233
+Current Balance: 0.0
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Deposit
+Account Number: 112239
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Deposit
+Account Number: 112233
+Deposit Amount: $-34.78
+Transaction Denied: Deposit amount must be positive
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Deposit
+Account Number: 555666
+Deposit Amount: $45.65
+Transaction Denied: CD has not yet reached date of maturity.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Deposit
+Account Number: 112233
+Deposit Amount: $39.78
+Previous Balance: $0.00
+Current Balance: $39.78
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Deposit
+Account Number: 323433
+Deposit Amount: $100.09
+Previous Balance: $0.00
+Current Balance: $100.09
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 112239
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 222998
+Withdrawal Amount: $34.56
+Transaction Denied: Transaction cannot be carried out on closed account
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 112233
+Withdrawal Amount: $-76.5
+Transaction Denied: Withdrawal amount must be positive
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 112234
+Withdrawal Amount: $1000.65
+Transaction Denied: Insufficient Funds
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 135790
+Withdrawal Amount: $12.89
+Transaction Denied: Insufficient Funds
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Withdrawal
+Account Number: 113565
+Withdrawal Amount: $10.09
+Transaction Denied: Insufficient Funds
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 112239
+Check Amount: $345.56
+Check Date: 71/7/2019
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 555666
+Check Amount: $456.76
+Check Date: 21/4/2019
+Transaction Denied: 
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 456654
+Check Amount: $-78.6
+Check Date: 91/6/2019
+Transaction Denied: Check amount must be greater than zero
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 456654
+Check Amount: $78.6
+Check Date: 91/6/2019
+Transaction Denied: Insufficient Funds
+Previous Balance: $19.51
+Current Balance: $17.01
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 456654
+Check Amount: $2.34
+Check Date: 01/8/2019
+Transaction Denied: Check is more than 6 months old
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 456654
+Check Amount: $3.43
+Check Date: 91/31/2019
+Previous Balance: $17.44
+Current Balance: $14.01
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Clear Check
+
+Account Requested: 456654
+Check Amount: $3.45
+Check Date: 91/5/2019
+Previous Balance: $14.46
+Current Balance: $11.01
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: New Account
+Account requested: 456654
+Transaction Denied: Account already exists
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: New Account
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+
+Anna        Harrison    221223223   113349         Savings        open           0.00        
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: New Account
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+
+Jacob       Marks       332112234   114456         CD             open           0.00             5/25/2020
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: New Account
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+
+Anna        Harrison    221223223   126780         CD             open           0.00            11/25/2020
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Delete Account
+Account Number: 555666
+Account Deleted
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Delete Account
+Account Number: 113349
+Account Deleted
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account Information
+SSN requested: 122334556
+Transaction Denied: 
+
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account Information
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+Anna        Harrison    221223223   126780         CD             open           0.00            11/25/2020
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account Information
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+Sarah       Jones       845521856   112233         Savings        open           39.78       
+Sarah       Jones       845521856   112234         Checking       open           644.56      
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Close Account
+Account Number: 232123
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Close Account
+Account Number: 222998
+Transaction Denied: Account is already closed.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Close Account
+Account Number: 323433
+Account Closed: No Transactions Permitted.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Reopen Account
+Account Number: 232123
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Reopen Account
+Account Number: 112233
+Transaction Denied: Account is already open.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Reopen Account
+Account Number: 111333
+Account Reopened:Transactions Permitted.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account History
+Account Number: 135423
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account History
+Account Number: 113349
+Transaction Denied: Account does not exist.
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account History
+Account Number: 112233
+Date         Type         Transaction Status  Amount       Previous Balance    New Balance         Maturity Date
+11/25/2019  Balance Inquiry     Confirmed       0.00                0.00                0.00
+11/25/2019  Deposit             Denied        -34.78                0.00                0.00
+11/25/2019  Deposit             Confirmed      39.78                0.00               39.78
+11/25/2019  Withdrawal          Denied        -76.50                0.00                0.00
+11/25/2019  Reopen Account      Denied          0.00                0.00                0.00 
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account History
+Account Number: 456654
+Date         Type         Transaction Status  Amount       Previous Balance    New Balance         Maturity Date
+11/25/2019  Clear Check         Denied          0.00               17.01               17.01
+11/25/2019  Clear Check         Confirmed       2.50               15.51               13.01
+11/25/2019  Clear Check         Denied          2.50               19.51               17.01
+11/25/2019  Clear Check         Denied          0.00               17.01               17.01
+11/25/2019  Clear Check         Denied          0.00               17.01               17.01
+11/25/2019  Clear Check         Confirmed       0.00               15.51               15.51
+11/25/2019  Check Deposit       Confirmed       3.43               14.01               10.58
+11/25/2019  Check Deposit       Confirmed       3.43               17.44               14.01
+11/25/2019  Clear Check         Denied          0.00               14.01               14.01
+11/25/2019  Clear Check         Confirmed       0.00               12.51               12.51
+11/25/2019  Check Deposit       Confirmed       3.45               11.01                7.56
+11/25/2019  Check Deposit       Confirmed       3.45               14.46               11.01 
+
+Date: Mon Nov 25 14:47:39 EST 2019
+Transaction: Account History
+Account Number: 126780
+Date         Type         Transaction Status  Amount       Previous Balance    New Balance         Maturity Date
+11/25/2019  New Account         Confirmed      0.00                0.00                0.00        11/25/2020   
+Name        Last        Social      Account Number Account type   Account Status Balance     Maturity Date  
+
+
+Sarah       Jones       845521856   112233         Savings        open           0.00        
+John        Roberts     917649845   456654         Checking       open           11.01       
+Fred        Stevens     641614599   135790         CD             open           0.00             1/ 4/2019
+Melissa     Smith       972003456   222998         Checking       closed         3456.76     
+Brad        Michaels    656443456   909090         Savings        closed         522.76      
+Alice       Peterson    222456565   323433         CD             closed         100.09      CD
+Max         Adams       098125432   113565         Savings        open           0.00        
+John        Roberts     917649845   113366         CD             closed         45.66            1/ 8/2011
+Janet       Macintosh   122343212   111333         Checking       open           112.30      
+Richard     James       224567777   119988         Savings        open           321.45      
+Sarah       Jones       845521856   112234         Checking       open           644.56      
+Jacob       Marks       332112234   114456         CD             open           0.00             5/25/2020
+Anna        Harrison    221223223   126780         CD             open           0.00            11/25/2020
+Total Amount in Savings Accounts: $0.0
+Total Amount in Checking Accounts: $4230.630000000001
+Total Amount in CD Accounts: $0.0
+Total Amount in All Accounts: $4230.630000000001
