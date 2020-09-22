@@ -1,0 +1,245 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class CDAccount extends SavingsAccount{
+	private Calendar maturityDate;
+	
+
+	public CDAccount(Account a, Calendar b, double c){//Parametized Constructor
+		super(a);
+		maturityDate=b;}
+		
+	public CDAccount(Account a, Calendar b){//Parametized Constructor
+		super(a);
+		maturityDate=b;}
+	
+	public CDAccount(Depositor a, int b, String c, String d, double e, Calendar cal, ArrayList<TransactionReceipt>  g) {
+		super (a,b,c,d,e,g);
+		maturityDate=cal;}
+
+	
+	public CDAccount() {
+		super();
+		maturityDate=Calendar.getInstance();
+		maturityDate.clear();}
+	
+	protected void setBalance(double input) {
+		//Method: setBalance
+		/* Input: 
+		 * input- the new balance
+		 * Process:
+		 * sets the balance to input
+		 * Output:
+		 * none
+		 */
+
+		balance=input;}
+	public double getBalance() {
+		//Method: getBalance
+		/* Input: 
+		 * 
+		 * Process:
+		 * returns the balance
+		 * Output:
+		 * returns the balance
+		 */
+
+		return balance;}
+	
+
+		
+		
+	
+	public TransactionReceipt balanceInquiry(Bank bank, ArrayList <Account> accountList,
+			TransactionReceipt receipt, 
+			TransactionTicket ticket,
+			int index) {
+	//Method: balanceInquiry
+	/* Input: 
+	* accountList- this is a reference to the account object arraylist
+	* ticket- reference to the TransactionTicket object 
+	* receipt- references the TransactionReceipt object
+	* reqAccount- the requested account number
+	* Process:
+	* the program searches for the account using findAccounts
+	* if it doesnt find one, returns an error receipt
+	* otherwise, returns the account index
+	* creates a copy account
+	* fills out the transaction receipt
+	* send it to the bank to reenter the database
+	* Output:
+	* program prints transaction receipt
+	*/	
+
+	
+		CDAccount temp= new CDAccount(accountList.get(index),accountList.get(index).getDate());
+
+
+		receipt= new TransactionReceipt
+				(ticket, true, temp.getBalance(), 
+				temp.getBalance(), 
+				ticket.getDate());
+
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+	
+	public TransactionReceipt makeDeposit(Bank bank, ArrayList <Account> accountList,
+			TransactionReceipt receipt, 
+			TransactionTicket ticket,
+			int index) {
+
+	//Method: makeDeposit
+	/* Input: 
+	* accountList- this is a reference to the account object arraylist
+	* ticket- reference to the TransactionTicket object 
+	* receipt- references the TransactionReceipt object
+	* reqAccount- the requested account number
+	* Process:
+	* the program searches for the account using findAccounts
+	* if it doesnt find one, returns an error receipt
+	* otherwise, returns the account index
+	* if the amount is invalid, returns an error
+	* creates a copy account
+	* otherwise it adds the deposit amount to the balance
+	* fills out the transaction receipt
+	* send to bank to reset database
+	* Output:
+	* program prints transaction receipt
+	*/
+
+	
+	Calendar cal=Calendar.getInstance();
+	
+	CDAccount temp= new CDAccount(accountList.get(index),accountList.get(index).getDate());
+
+	
+	
+	if (temp.getDate().after(ticket.getDate())==true){
+	receipt= new TransactionReceipt(ticket, false, "CD has not yet reached date of maturity.",
+				temp.getBalance(), temp.getBalance(), temp.getDate());
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);} 
+
+	else if (temp.getStatus().contentEquals("closed")){
+	receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+	temp.getBalance(), temp.getBalance(), ticket.getDate());
+	temp.getHistory().add(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+	else if (ticket.getAmount()<=0) {
+	receipt= new TransactionReceipt(ticket, false, "Deposit amount must be positive",
+	temp.getBalance(), temp.getBalance(), ticket.getDate());
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+
+
+	else { temp.setBalance(temp.getBalance()+ticket.getAmount());
+	cal.set(Calendar.MONTH, ticket.getTerm());
+	receipt= new TransactionReceipt(ticket, true, 
+						temp.getBalance()-ticket.getAmount(), 
+						temp.getBalance(),cal);
+
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	Bank.totals(bank);
+	return receipt= new TransactionReceipt(receipt);}}
+
+	public TransactionReceipt makeWithdrawal(Bank bank, ArrayList <Account> accountList,
+			TransactionReceipt receipt, 
+			TransactionTicket ticket,
+			int index) {
+	//Method: makeWithdrawal
+	/* Input: 
+	* accountList- this is a reference to the account object arraylist
+	* ticket- reference to the TransactionTicket object 
+	* receipt- references the TransactionReceipt object
+	* reqAccount- the requested account number
+	* Process:
+	* the program searches for the account using findAccounts
+	* if it doesnt find one, returns an error receipt
+	* otherwise, returns the account index
+	* if the amount is invalid, returns an error
+	* creates a copy account
+	* otherwise it removes the withdrawal amount from the balance
+	* fills out the transaction receipt
+	* sends to bank to reenter the database
+	* Output:
+	* program prints transaction receipt
+	*/
+	Calendar cal= Calendar.getInstance();
+	
+	CDAccount temp= new CDAccount(accountList.get(index),accountList.get(index).getDate());
+
+	
+	
+	if (temp.getDate().after(ticket.getDate())==true){
+		receipt= new TransactionReceipt(ticket, false, "CD has not yet reached date of maturity.",
+					temp.getBalance(), temp.getBalance(), temp.getDate());
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);} 
+
+
+	else if (temp.getStatus().contentEquals("closed")){
+	receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+					temp.getBalance(), temp.getBalance(), ticket.getDate());
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+	else if (ticket.getAmount()<=0) {
+	receipt= new TransactionReceipt(ticket, false, "Withdrawal amount must be positive",
+				temp.getBalance(), temp.getBalance(), ticket.getDate());
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+	else if(temp.getBalance()<ticket.getAmount()) {
+	receipt= new TransactionReceipt(ticket, false, "Insufficient Funds",
+			temp.getBalance(), temp.getBalance(), ticket.getDate());
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+
+
+	else {temp.setBalance(temp.getBalance()-ticket.getAmount());
+	cal.set(Calendar.MONTH, ticket.getTerm());
+
+	receipt= new TransactionReceipt(ticket, true, 
+						temp.getBalance()+ticket.getAmount(), 
+						temp.getBalance(), cal);
+
+	temp.addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	Bank.totals(bank);
+	return receipt= new TransactionReceipt(receipt);}}
+
+
+	public String toString(String a) {
+	String str=String.format("%6d%1s%2d%1s%4d", maturityDate.get(Calendar.MONTH)+1,"/",
+			maturityDate.get(Calendar.DATE), "/",
+			maturityDate.get(Calendar.YEAR));
+	return str;}
+
+
+
+public Calendar getDate() {
+//Method: getDate
+/* Input: 
+ * none
+ * Process:
+ * return the date
+ * Output:
+ * returns the date
+ */
+return maturityDate;}
+
+
+
+}
