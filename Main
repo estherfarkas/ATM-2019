@@ -1,0 +1,700 @@
+import java.util.*;
+import java.io.*;
+public class HW7 {
+
+	public static void main(String[] args) throws IOException {
+		
+		
+		File output= new File("hw7Output.txt");
+		PrintWriter outfile= new PrintWriter(output);
+		File test= new File("hw7Input.txt");
+		Scanner input= new Scanner(test);
+		
+		boolean notDone= true;
+		Bank bank= new Bank(readAccounts());
+		ArrayList <Account> accountList= new ArrayList<Account>(bank.getList());
+		printAccounts(bank, accountList, outfile);
+		Account account= new Account();
+		
+		
+		while(notDone==true) {
+			menu();
+			System.out.println("Please make a selection from the menu");
+			char choice= input.next().charAt(0);
+			choice=Character.toUpperCase(choice);
+			
+			switch(choice) {
+		 	case 'Q': notDone=false;
+		 			System.out.print("Program Terminated");
+		 			printAccounts (bank, accountList, outfile);
+		 			break;
+		 	case 'N': newAccount(bank,accountList,outfile,input);
+		 			break;
+		 	case 'B': balance(bank, accountList, outfile, input);
+		 			break;
+		 	case 'I': accountInfo(bank, accountList, outfile, input);
+		 			break;
+		 	case 'W': withdrawal(bank, accountList, account, outfile, input);
+		 			break;
+		 	case 'C': check(bank, accountList, outfile, input);
+		 			break;
+		 	case 'D': deposit(bank,accountList, outfile, input);
+		 			break;
+		 	case 'X': deleteAccount(bank, accountList, outfile, input);
+		 			break;
+		 	case 'S': shutAccount(bank, accountList,account, outfile, input);
+		 			break;
+		 	case 'R': reopenAccount(bank, accountList, account, outfile, input);
+		 			break;
+		 	case 'H': accountHistory(bank, accountList, account, outfile, input);
+		 			break;
+		 	default: System.out.println("Error: " + choice+ " is not a valid option. Please try again");}}
+		 	
+		
+		
+		
+	
+	input.close();
+	outfile.close();}
+
+	
+public static Bank readAccounts()throws IOException {
+		
+		//Method: readAccounts
+				/* Input: 
+				 * accountList- this is a reference to the account object arraylist
+				 * Process:
+				 * the data from the file is read into the method
+				 * using a while loop, the data is assigned to an account in the array
+				 * this uses parametized constructors to assign private data members
+				 * 
+				 * Output:
+				 * program returns the number of accounts 
+				 */
+		ArrayList <Account> accountList= new ArrayList<Account>();					
+		File infile= new File("hw7Info.txt");
+		Scanner input= new Scanner(infile);
+		String line;
+		
+		double totalSav=0;
+		double totalCheck=0;
+		double totalCD=0;
+		double total=0;
+		while (input.hasNext()) {
+				
+				Calendar calendar= Calendar.getInstance();
+				Account nInfo;
+				
+				line= input.nextLine();
+				String[] tokens= line.split(" ");
+
+				ArrayList <TransactionReceipt> receiptData= new ArrayList<>();
+				Name names= new Name(tokens[0], tokens[1]);
+				Depositor person= new Depositor(names, tokens[2]);
+				if (tokens[4].contentEquals("CD")) {
+					totalCD+=Double.parseDouble(tokens[6]);
+					calendar.clear();
+					calendar.set(Integer.parseInt(tokens[9]), 
+									 Integer.parseInt(tokens[7])-1, 
+									 Integer.parseInt(tokens[8]));
+					CDAccount info= new CDAccount(person, 
+											Integer.parseInt(tokens[3]), 
+											tokens[4],
+											tokens[5],
+											Double.parseDouble(tokens [6]),
+											calendar,receiptData);
+					 nInfo=info;
+					 accountList.add(info);}
+				
+				else if (tokens[4].contentEquals("Savings")) {
+					SavingsAccount info= new SavingsAccount
+							(person, 
+							Integer.parseInt(tokens[3]),
+							tokens[4],
+							tokens[5],
+							Double.parseDouble(tokens[6]),
+							receiptData);
+					totalSav+=Double.parseDouble(tokens[6]);
+				 nInfo=info;
+				 accountList.add(info);}
+				
+			
+				else{ CheckingAccount info= new CheckingAccount
+						(person, 
+						Integer.parseInt(tokens[3]),
+						tokens[4],
+						tokens[5],
+						Double.parseDouble(tokens[6]),
+						receiptData);
+				totalSav+=Double.parseDouble(tokens[6]);totalCheck+=Double.parseDouble(tokens[6]);
+				 nInfo= info;
+				 accountList.add(info);}
+				
+				
+					
+		
+		total+=Double.parseDouble(tokens[6]);}
+		
+		Bank bank= new Bank(accountList, totalSav, totalCheck, totalCD, total);
+		input.close();
+		return bank;}
+
+public static void printAccounts (Bank bank, ArrayList <Account> accountList, PrintWriter outfile) {
+	
+	//Method: printAccounts
+	/* Input: 
+	 * bank- this is a reference the the bank object
+	 * accountList- this is a reference to the account object arraylist 
+	 * outfile- reference the printWriter outfile object 
+	 * Process:
+	 * using a for loop, the program reads every account
+	 * creates a copy of the account objects
+	 * and prints out the data
+	 * Output:
+	 * program prints the database of accounts
+	 */
+	Account a= new Account();
+	Calendar cal= Calendar.getInstance();
+	cal.clear();
+	outfile.println(a.toString());
+	outfile.println("");
+	for (int count=0; count<accountList.size(); count++) {
+	
+			Account temp= accountList.get(count);
+			outfile.print(temp.toString(0));
+			
+		if (temp.getAccountType().equals("CD")) {
+			outfile.print(temp.toString("CD"));
+	
+			}}
+	
+	outfile.println(bank.toString());
+	}
+
+public static void menu() {
+	
+	//Method: menu
+	/* Input: 
+	 * This method doesn't have any input 
+	 * Process:
+	 *Prints a menu of choices 
+	 * Output:
+	 * Prints a menu of choices 
+	 */
+							
+	System.out.println(" ");
+	System.out.println("\t************************");
+	System.out.println("\t       Menu             ");
+	System.out.println("\t************************");
+	System.out.println("\t       Withdrawl-- press 'W'");
+	System.out.println("\t       Deposit-- press 'D'");
+	System.out.println("\t       Clear Check-- press 'C'");
+	System.out.println("\t       Balance-- press 'B'");
+	System.out.println("\t       New Account-- press'N'");
+	System.out.println("\t       Delete Account-- press 'X'");
+	System.out.println("\t       Account Info-- press 'I'");
+	System.out.println("\t       Quit-- press 'Q'");}
+
+
+public static void balance(Bank bank, ArrayList<Account> accountList, PrintWriter outfile, Scanner input) {
+	
+	//Method: balance
+	/* Input: 
+	 * bank- this is a reference the the bank object
+	 * accountList- this is a reference to the account object arraylist
+	 * account- this is a reference to the account object
+	 * outfile- reference the printWriter outfile object 
+	 * input- reference to the Scanner input object
+	 * Process:
+	 * the program prompts a user for the account
+	 * it sends the information to the balanceInquiry method in the account class
+	 * to fill out the transaction receipt
+	 * program prints the transaction receipt
+	 * Output:
+	 * program prints transaction receipt
+	 */
+	
+
+Calendar calendar= Calendar.getInstance();
+TransactionReceipt receipt= new TransactionReceipt();
+TransactionTicket ticket= new TransactionTicket(calendar, "Balance Inquiry");
+
+
+System.out.println("Please enter the account number.");
+int reqAccount= input.nextInt();
+int index=bank.findAccount(accountList, reqAccount);
+
+if (index==-1) {
+receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());}
+
+else {
+
+
+receipt= accountList.get(index).balanceInquiry(bank,accountList,receipt,ticket,index);
+outfile.println(ticket.toString(reqAccount));
+
+if (receipt.getSuccessIndicator()==false){
+		outfile.println("Transaction Denied: " + receipt.getReason());}
+
+else {outfile.println("Current Balance: " + receipt.getPostBalance());}}}
+
+
+public static void deposit(Bank bank, ArrayList<Account> accountList, PrintWriter outfile, 
+									Scanner input) {
+	
+	//Method: Deposit
+		/* Input: 
+		 * bank- this is a reference the the bank object
+		 * accountList- this is a reference to the account object arraylist
+		 * account- this is a reference to the account object
+		 * outfile- reference the printWriter outfile object 
+		 * input- reference to the Scanner input object
+		 * Process:
+		 * the program prompts a user for the account and amount
+		 * it sends the information to the makeDeposit method in the account class
+		 * to fill out the transaction receipt
+		 * program prints the transaction receipt
+		 * Output:
+		 * program prints transaction receipt
+		 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Deposit");
+
+
+	System.out.println("Please enter the account number.");
+
+	int reqAccount= input.nextInt();
+	int index=bank.findAccount(accountList, reqAccount);
+	outfile.println(ticket.toString(reqAccount));
+	
+	if (index==-1) {
+		receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());
+		outfile.println("Transaction Denied: " + receipt.getReason());}
+	
+	else {System.out.println("Please enter the deposit amount.");
+			ticket= new TransactionTicket(calendar, "Deposit", input.nextDouble());
+			outfile.println("Deposit Amount: $" + ticket.getAmount());
+			if (accountList.get(index).getAccountType().equals("CD")) {
+				System.out.println("Please enter the new Maturity Date- 6,12,18, or 24 months away");
+				ticket= new TransactionTicket(calendar,"Deposit", ticket.getAmount(), input.nextInt());}
+		
+			receipt= (accountList.get(index).makeDeposit(bank,accountList,receipt,ticket, index));
+			if(receipt.getSuccessIndicator()==false) {
+				outfile.println("Transaction Denied: " + receipt.getReason());}
+			
+			else {outfile.println(receipt.toString());}}}
+				
+				
+public static void withdrawal(Bank bank, ArrayList<Account> accountList,
+										Account account, PrintWriter outfile, 
+										Scanner input) {
+	
+	//Method: Withdrawal
+			/* Input: 
+			 * bank- this is a reference the the bank object
+			 * accountList- this is a reference to the account object arraylist
+			 * account- this is a reference to the account object
+			 * outfile- reference the printWriter outfile object 
+			 * input- reference to the Scanner input object
+			 * Process:
+			 * the program prompts a user for the account and amount
+			 * it sends the information to the makeWithdrawal method in the account class
+			 * to fill out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Withdrawal");
+
+	System.out.println("Please enter the account number.");
+
+	int reqAccount= input.nextInt();
+	int index=bank.findAccount(accountList, reqAccount);
+	outfile.println(ticket.toString(reqAccount));
+	
+	if (index==-1) {
+		receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());
+		outfile.println("Transaction Denied: " + receipt.getReason());}
+	
+	else {System.out.println("Please enter the withdrawal amount.");
+			ticket= new TransactionTicket(calendar, "Withdrawal", input.nextDouble());
+			outfile.println("Withdrawal Amount: $" + ticket.getAmount());
+			if (accountList.get(index).getAccountType().equals("CD")) {
+				System.out.println("Please enter the new Maturity Date- 6,12,18, or 24 months away");
+				ticket= new TransactionTicket(calendar,"Deposit", ticket.getAmount(), input.nextInt());}
+		
+			receipt=accountList.get(index).makeWithdrawal(bank,accountList,receipt,ticket, index);
+			if(receipt.getSuccessIndicator()==false) {
+				outfile.println("Transaction Denied: " + receipt.getReason());}
+			
+			else {outfile.println(receipt.toString());}}}
+				
+
+public static void check(Bank bank, ArrayList<Account> accountList,PrintWriter outfile, 
+										Scanner input) {
+	
+	//Method: check
+			/* Input: 
+			 * bank- this is a reference the the bank object
+			 * accountList- this is a reference to the account object arraylist
+			 * account- this is a reference to the account object
+			 * outfile- reference the printWriter outfile object 
+			 * input- reference to the Scanner input object
+			 * Process:
+			 * the program prompts a user for the account and amount and date
+			 * it sends the information to the clearCheck method in the check class
+			 * to fill out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+	
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Clear Check");
+
+	outfile.println(ticket.toString());
+	System.out.println("Please enter the account number.");
+	System.out.println("Please enter the check amount.");
+	
+	Check check= new Check(input.nextInt(), input.nextDouble()); 
+	System.out.println("Please enter the date of the check.");
+	
+	Calendar checkDate= Calendar.getInstance();
+	checkDate.clear();
+	checkDate.set(Calendar.MONTH, input.nextInt()-1);
+	checkDate.set(Calendar.DATE, input.nextInt());
+	checkDate.set(Calendar.YEAR, input.nextInt());
+	
+	check= new Check(check.getAccount(), check.getAmount(), checkDate);
+	
+	outfile.println(check.toString());
+	
+	int index=bank.findAccount(accountList, check.getAccount());
+	
+	if (index==-1) {
+	receipt= new TransactionReceipt(ticket, false, "Account not found.", ticket.getDate());}
+	
+	else {
+	receipt=accountList.get(index).clearCheck(bank,accountList,receipt,ticket, check, index);
+	
+	if (receipt.getSuccessIndicator()==false){
+			outfile.println("Transaction Denied: " + receipt.getReason());
+		
+		if (receipt.getReason().contentEquals("Insufficient Funds")){
+			outfile.println(receipt.toString());}}
+	
+	else {
+			ticket= new TransactionTicket(calendar, "Check Deposit", check.getAmount());		
+			receipt= new TransactionReceipt(accountList.get(index).clearCheck(bank,accountList,receipt,ticket, check, index));
+			outfile.println(receipt.toString());}}}
+
+
+public static void newAccount(Bank bank, ArrayList<Account> accountList,
+						PrintWriter outfile, Scanner input) {
+	
+	//Method: newAccount
+			/* Input: 
+			 * bank- this is a reference the the bank object
+			 * accountList- this is a reference to the account object arraylist
+			 * account- this is a reference to the account object
+			 * outfile- reference the printWriter outfile object 
+			 * input- reference to the Scanner input object
+			 * Process:
+			 * the program prompts a user for the account
+			 * then prompts the user for the rest of the information
+			 * it sends the information to the newAccount method in the bank class
+			 * to fill out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "New Account");
+	
+	outfile.println(ticket.toString());
+	
+	System.out.println("Please enter the new account number.");
+	int reqAccount= input.nextInt();
+	int index=bank.findAccount(accountList, reqAccount);
+	
+	if (index!=-1) {
+		receipt=new TransactionReceipt(ticket, false, "Account already exists", ticket.getDate());
+		outfile.println("Account requested: " + reqAccount);
+		outfile.println("Transaction Denied: "+ receipt.getReason());}
+	
+	else {
+
+	System.out.println("Please enter your full name (First Last)");
+	String firstName=input.next();
+	String lastName= input.next();
+	System.out.println("Please enter your SSN");
+	String ssn= input.next();
+	System.out.println("Please enter the account type- Savings, Checking, or CD.");
+	String acctType= input.next();
+	if (acctType.equals("CD")) {
+		System.out.println("Please enter the Maturity Date- 6,12,18, or 24 months away");
+		ticket= new TransactionTicket(calendar, "New Account",0, input.nextInt());}
+	else ticket= new TransactionTicket( calendar, "New Account",0 , 0);
+	
+	receipt= bank.openNewAccount(accountList,ticket,receipt,reqAccount,firstName, 
+										lastName, ssn,acctType);
+	 
+	Account temp= accountList.get(accountList.size()-1);
+	outfile.println(temp.toString());
+	outfile.print(temp.toString(0));
+	if (temp.getAccountType().equals("CD")) {
+		outfile.print(temp.toString("CD"));}
+		outfile.println("");}}
+
+public static void deleteAccount(Bank bank, ArrayList<Account> accountList,
+											PrintWriter outfile, Scanner input) {
+	
+	//Method: deleteAccount
+			/* Input: 
+			 * bank- this is a reference the the bank object
+			 * accountList- this is a reference to the account object arraylist
+			 * account- this is a reference to the account object
+			 * outfile- reference the printWriter outfile object 
+			 * input- reference to the Scanner input object
+			 * Process:
+			 * the program prompts a user for the account 
+			 * it sends the information to the deleteAccount method in the bank class
+			 * to fill out the transaction receipt
+			 * program prints the transaction receipt
+			 * Output:
+			 * program prints transaction receipt
+			 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Delete Account");
+	
+	
+	
+	System.out.println("Please enter the account number.");
+	int reqAccount= input.nextInt();
+	
+	int index=bank.findAccount(accountList, reqAccount);
+	
+	if (index==-1) {
+		receipt= new TransactionReceipt(ticket, false, "Account does not exist.", ticket.getDate());}
+		
+		else {receipt= new TransactionReceipt(bank.deleteAccount(bank, accountList,ticket,receipt, index));
+	
+	outfile.println(ticket.toString(reqAccount));
+	
+	if (receipt.getSuccessIndicator()==false) {
+		outfile.println("Transaction Denied: "+ receipt.getReason());}
+
+	else {outfile.println("Account Deleted");}}}
+
+public static void accountInfo(Bank bank, ArrayList<Account> accountList,
+										PrintWriter outfile, Scanner input) {
+	
+	//Method: accountInfo
+	/* Input: 
+	 * bank- this is a reference the the bank object
+	 * accountList- this is a reference to the account object arraylist
+	 * account- this is a reference to the account object
+	 * outfile- reference the printWriter outfile object 
+	 * input- reference to the Scanner input object
+	 * Process:
+	 * the program prompts a user for the ssn
+	 * it sends the information to the accountInfo method in the bank class
+	 * to fill out the transaction receipt
+	 * program prints the transaction receipt
+	 * and account information
+	 * Output:
+	 * program prints transaction receipt
+	 */
+
+	Account a= new Account();
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Account Information");
+	
+	outfile.println(ticket.toString());
+	
+	System.out.println("Please enter the Social security number.");
+	
+	String social= input.next();
+	receipt= bank.accountInfo(accountList,ticket,receipt, social);
+	
+	if (receipt.getSuccessIndicator()==false) {
+		outfile.println("SSN requested: "+ social);
+		outfile.println("Transaction Denied: " + receipt.getReason());}
+
+	else {
+			outfile.print(a.toString());
+
+			for( int count=0; count<accountList.size(); count++) {
+				if (accountList.get(count).getDepositor().getSsn().equals(social)){
+				int index=count;
+		
+				Account temp=accountList.get(index);
+				outfile.print(temp.toString(0));
+				
+				if (temp.getAccountType().equals("CD")) {
+					outfile.print(temp.toString("CD"));}}}} 
+				outfile.println("");}
+
+public static void shutAccount(Bank bank, ArrayList <Account> accountList,
+											Account account, PrintWriter outfile, Scanner input) {
+	
+	//Method: shutAccount
+	/* Input: 
+	 * bank- this is a reference the the bank object
+	 * accountList- this is a reference to the account object arraylist
+	 * account- this is a reference to the account object
+	 * outfile- reference the printWriter outfile object 
+	 * input- reference to the Scanner input object
+	 * Process:
+	 * the program prompts a user for the account 
+	 * it sends the information to the shutAccount method in the account class
+	 * to fill out the transaction receipt
+	 * program prints the transaction receipt
+	 * Output:
+	 * program prints transaction receipt
+	 */
+
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Close Account");
+	
+	
+	System.out.println("Please enter the account number.");
+	int reqAccount= input.nextInt();
+	receipt= account.shutAccount(bank, accountList,ticket,receipt, reqAccount);
+	outfile.println(ticket.toString(reqAccount));
+
+	if (receipt.getSuccessIndicator()==false) {
+		outfile.println("Transaction Denied: "+ receipt.getReason());}
+	
+	else outfile.println("Account Closed: No Transactions Permitted.");}
+
+public static void reopenAccount(Bank bank, ArrayList <Account> accountList, 
+											Account account, PrintWriter outfile, Scanner input) {
+	
+	//Method: reOpenAccount
+		/* Input: 
+		 * bank- this is a reference the the bank object
+		 * accountList- this is a reference to the account object arraylist
+		 * account- this is a reference to the account object
+		 * outfile- reference the printWriter outfile object 
+		 * input- reference to the Scanner input object
+		 * Process:
+		 * the program prompts a user for the account 
+		 * it sends the information to the reOpenAccount method in the account class
+		 * to fill out the transaction receipt
+		 * program prints the transaction receipt
+		 * Output:
+		 * program prints transaction receipt
+		 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Reopen Account");
+	
+	System.out.println("Please enter the account number.");
+	int reqAccount= input.nextInt();
+	receipt= account.reopenAccount(bank, accountList,ticket,receipt, reqAccount);
+	outfile.println(ticket.toString(reqAccount));
+
+	
+	if (receipt.getSuccessIndicator()==false) {
+		outfile.println("Transaction Denied: "+ receipt.getReason());}
+	
+	else outfile.println("Account Reopened:Transactions Permitted.");}
+	
+public static void accountHistory(Bank bank, ArrayList<Account> accountList, Account account,
+												PrintWriter outfile, Scanner input) {
+	
+	//Method: accountHistory
+		/* Input: 
+		 * bank- this is a reference the the bank object
+		 * accountList- this is a reference to the account object arraylist
+		 * account- this is a reference to the account object
+		 * outfile- reference the printWriter outfile object 
+		 * input- reference to the Scanner input object
+		 * Process:
+		 * the program prompts a user for the account 
+		 * it sends the information to the getHistory method in the account class
+		 * to fill out the transaction receipt
+		 * program prints the transaction receipt
+		 * prints the receipt histroy array
+		 * Output:
+		 * program prints transaction receipt
+		 * prints the receipt history array
+		 */
+	
+	Calendar calendar= Calendar.getInstance();
+	TransactionReceipt receipt= new TransactionReceipt();
+	TransactionTicket ticket= new TransactionTicket(calendar, "Account History");
+
+
+	System.out.println("Please enter the account number.");
+
+	int reqAccount= input.nextInt();
+	
+	receipt=account.getHistory(bank,accountList,ticket,receipt, reqAccount);
+	outfile.println(ticket.toString(reqAccount));
+
+
+	if (receipt.getSuccessIndicator()==false){
+			outfile.println("Transaction Denied: " + receipt.getReason());}
+
+	else {int index=bank.findAccount(accountList, reqAccount);
+			
+			Account temp= new Account(accountList.get(index));
+			outfile.printf("%-13s%-13s%-20s%-13s%-20s%-20s%-13s", "Date", "Type", "Transaction Status",
+			"Amount", "Previous Balance", "New Balance", "Maturity Date");
+
+			for (int count=0; count<temp.getHistory().size(); count++) {
+				
+				receipt= temp.getHistory().get(count);
+				ticket= receipt.getTicket();
+				String status;
+				
+				if (receipt.getSuccessIndicator()==true) {
+					status= "Confirmed";}
+				else status="Denied";
+				
+				outfile.printf("\n%2d%1s%2d%1s%4d%-2s", (ticket.getDate().get(Calendar.MONTH)+1),"/",
+						(ticket.getDate().get(Calendar.DATE)), "/",
+						(ticket.getDate().get(Calendar.YEAR)), "");
+				
+				if(temp.getAccountType().contentEquals("CD")) {
+					outfile.printf("%-20s%-1s%10.2f%20.2f%20.2f", 
+									ticket.getType(),
+									status, ticket.getAmount(), receipt.getPreBalance(),
+									receipt.getPostBalance());
+					
+						outfile.printf("%10d%1s%2d%1s%4d%-2s", (receipt.getPostDate().get(Calendar.MONTH)+1),"/",
+							(receipt.getPostDate().get(Calendar.DATE)), "/",
+							(receipt.getPostDate().get(Calendar.YEAR)), "");}
+				
+				else{outfile.printf("%-20s%-10s%10.2f%20.2f%20.2f",  
+						ticket.getType(),status, ticket.getAmount(), 
+						receipt.getPreBalance(),
+						receipt.getPostBalance());}}
+				outfile.println(" ");}}
+					
+}
+	
+
+	
+
+
+
+	
+	
