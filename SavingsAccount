@@ -1,0 +1,202 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class SavingsAccount extends Account{
+			protected double balance;
+			
+			
+	
+	public SavingsAccount() { //No Args constructor
+		super();}
+	
+	public SavingsAccount(Depositor a, int b, String c, String d, double e, ArrayList<TransactionReceipt>  g) {
+		//Parametized Constructor
+		super (a,b,c,d,e,g);}
+	
+	public SavingsAccount(Account a) {
+		super(a);}
+	
+	protected void setBalance(double input) {
+	//Method: setBalance
+	/* Input: 
+	 * input- the new balance
+	 * Process:
+	 * sets the balance to input
+	 * Output:
+	 * none
+	 */
+
+	balance=input;}
+	
+	public double getBalance() {
+		//Method: getBalance
+		/* Input: 
+		 * 
+		 * Process:
+		 * returns the balance
+		 * Output:
+		 * returns the balance
+		 */
+
+		return balance;}
+	
+
+
+
+public TransactionReceipt balanceInquiry(Bank bank, ArrayList <Account> accountList,
+		TransactionReceipt receipt, 
+		TransactionTicket ticket,
+		int index) {
+//Method: balanceInquiry
+/* Input: 
+* accountList- this is a reference to the account object arraylist
+* ticket- reference to the TransactionTicket object 
+* receipt- references the TransactionReceipt object
+* reqAccount- the requested account number
+* Process:
+* the program searches for the account using findAccounts
+* if it doesnt find one, returns an error receipt
+* otherwise, returns the account index
+* creates a copy account
+* fills out the transaction receipt
+* send it to the bank to reenter the database
+* Output:
+* program prints transaction receipt
+*/	
+
+
+	SavingsAccount temp= new SavingsAccount(accountList.get(index));
+
+
+	receipt= new TransactionReceipt
+			(ticket, true, balance, 
+			balance, 
+			ticket.getDate());
+
+	addTransaction(receipt);
+	bank.changeDatabase(accountList,index, temp);
+	return receipt= new TransactionReceipt(receipt);}
+
+public TransactionReceipt makeDeposit(Bank bank, ArrayList <Account> accountList,
+		TransactionReceipt receipt, 
+		TransactionTicket ticket,
+		int index) {
+
+//Method: makeDeposit
+/* Input: 
+* accountList- this is a reference to the account object arraylist
+* ticket- reference to the TransactionTicket object 
+* receipt- references the TransactionReceipt object
+* reqAccount- the requested account number
+* Process:
+* the program searches for the account using findAccounts
+* if it doesnt find one, returns an error receipt
+* otherwise, returns the account index
+* if the amount is invalid, returns an error
+* creates a copy account
+* otherwise it adds the deposit amount to the balance
+* fills out the transaction receipt
+* send to bank to reset database
+* Output:
+* program prints transaction receipt
+*/
+
+
+Calendar cal=Calendar.getInstance();
+
+SavingsAccount temp= new SavingsAccount(accountList.get(index));
+
+
+
+if (temp.getStatus().contentEquals("closed")){
+receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+temp.getBalance(), temp.getBalance(), ticket.getDate());
+temp.getHistory().add(receipt);
+bank.changeDatabase(accountList,index, temp);
+return receipt= new TransactionReceipt(receipt);}
+
+else if (ticket.getAmount()<=0) {
+receipt= new TransactionReceipt(ticket, false, "Deposit amount must be positive",
+temp.getBalance(), temp.getBalance(), ticket.getDate());
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+return receipt= new TransactionReceipt(receipt);}
+
+
+
+else { temp.setBalance(temp.getBalance()+ticket.getAmount());
+cal.set(Calendar.MONTH, ticket.getTerm());
+receipt= new TransactionReceipt(ticket, true, 
+					temp.getBalance()-ticket.getAmount(), 
+					temp.getBalance(),cal);
+
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+Bank.totals(bank);
+return receipt= new TransactionReceipt(receipt);}}
+
+public TransactionReceipt makeWithdrawal(Bank bank, ArrayList <Account> accountList,
+		TransactionReceipt receipt, 
+		TransactionTicket ticket,
+		int index) {
+//Method: makeWithdrawal
+/* Input: 
+* accountList- this is a reference to the account object arraylist
+* ticket- reference to the TransactionTicket object 
+* receipt- references the TransactionReceipt object
+* reqAccount- the requested account number
+* Process:
+* the program searches for the account using findAccounts
+* if it doesnt find one, returns an error receipt
+* otherwise, returns the account index
+* if the amount is invalid, returns an error
+* creates a copy account
+* otherwise it removes the withdrawal amount from the balance
+* fills out the transaction receipt
+* sends to bank to reenter the database
+* Output:
+* program prints transaction receipt
+*/
+Calendar cal= Calendar.getInstance();
+
+
+SavingsAccount temp= new SavingsAccount(accountList.get(index));
+
+
+if (temp.getStatus().contentEquals("closed")){
+receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+				temp.getBalance(), temp.getBalance(), ticket.getDate());
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+return receipt= new TransactionReceipt(receipt);}
+
+else if (ticket.getAmount()<=0) {
+receipt= new TransactionReceipt(ticket, false, "Withdrawal amount must be positive",
+			temp.getBalance(), temp.getBalance(), ticket.getDate());
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+return receipt= new TransactionReceipt(receipt);}
+
+else if(temp.getBalance()<ticket.getAmount()) {
+receipt= new TransactionReceipt(ticket, false, "Insufficient Funds",
+		temp.getBalance(), temp.getBalance(), ticket.getDate());
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+return receipt= new TransactionReceipt(receipt);}
+
+
+
+else { temp.setBalance(temp.getBalance()-ticket.getAmount());
+
+receipt= new TransactionReceipt(ticket, true, 
+					temp.getBalance()+ticket.getAmount(), 
+					temp.getBalance(), cal);
+
+temp.addTransaction(receipt);
+bank.changeDatabase(accountList,index, temp);
+Bank.totals(bank);
+return receipt= new TransactionReceipt(receipt);}}}
+
+
+
+
