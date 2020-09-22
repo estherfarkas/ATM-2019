@@ -1,0 +1,278 @@
+import java.util.ArrayList;
+import java.util.Calendar;
+
+public class CheckingAccount extends Account{
+		
+		
+		public CheckingAccount() {//No args constructor
+			super();}
+		
+		public CheckingAccount(Depositor a, int b, String c, String d, double e, ArrayList<TransactionReceipt>  g) {
+			//Parametized Constructor
+			super (a,b,c,d,e,g);}
+		
+		public CheckingAccount(Account a) {
+			//Copy Constructor
+			super(a);}
+		
+		private void setBalance(double input) {
+		//Method: setBalance
+		/* Input: 
+		 * input- the new balance
+		 * Process:
+		 * sets the balance to input
+		 * Output:
+		 * none
+		 */
+
+		balance=input;}
+		
+		public double getBalance() {
+			//Method: getBalance
+			/* Input: 
+			 * 
+			 * Process:
+			 * returns the balance
+			 * Output:
+			 * returns the balance
+			 */
+
+			return balance;}
+		
+		public TransactionReceipt balanceInquiry(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {
+		//Method: balanceInquiry
+		/* Input: 
+		* accountList- this is a reference to the account object arraylist
+		* ticket- reference to the TransactionTicket object 
+		* receipt- references the TransactionReceipt object
+		* reqAccount- the requested account number
+		* Process:
+		* the program searches for the account using findAccounts
+		* if it doesnt find one, returns an error receipt
+		* otherwise, returns the account index
+		* creates a copy account
+		* fills out the transaction receipt
+		* send it to the bank to reenter the database
+		* Output:
+		* program prints transaction receipt
+		*/	
+
+		
+			CheckingAccount temp= new CheckingAccount(accountList.get(index));
+
+
+			receipt= new TransactionReceipt
+					(ticket, true, temp.getBalance(), 
+					temp.getBalance(), 
+					ticket.getDate());
+
+			temp.addTransaction(receipt);
+			bank.changeDatabase(accountList,index, temp);
+			return receipt= new TransactionReceipt(receipt);}
+
+		public TransactionReceipt makeDeposit(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {
+
+		//Method: makeDeposit
+		/* Input: 
+		* accountList- this is a reference to the account object arraylist
+		* ticket- reference to the TransactionTicket object 
+		* receipt- references the TransactionReceipt object
+		* reqAccount- the requested account number
+		* Process:
+		* the program searches for the account using findAccounts
+		* if it doesnt find one, returns an error receipt
+		* otherwise, returns the account index
+		* if the amount is invalid, returns an error
+		* creates a copy account
+		* otherwise it adds the deposit amount to the balance
+		* fills out the transaction receipt
+		* send to bank to reset database
+		* Output:
+		* program prints transaction receipt
+		*/
+
+		
+		CheckingAccount temp= new CheckingAccount(accountList.get(index));
+
+
+
+		if (temp.getStatus().contentEquals("closed")){
+		receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+		temp.getBalance(), temp.getBalance(), ticket.getDate());
+		temp.getHistory().add(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+
+		else if (ticket.getAmount()<=0) {
+		receipt= new TransactionReceipt(ticket, false, "Deposit amount must be positive",
+		temp.getBalance(), temp.getBalance(), ticket.getDate());
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+
+
+
+		else {temp.setBalance(temp.getBalance()+ticket.getAmount());
+		receipt= new TransactionReceipt(ticket, true, 
+							temp.getBalance()-ticket.getAmount(), 
+							temp.getBalance(),ticket.getDate());
+
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		Bank.totals(bank);
+		return receipt= new TransactionReceipt(receipt);}}
+
+		public TransactionReceipt makeWithdrawal(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, 
+				TransactionTicket ticket,
+				int index) {
+		//Method: makeWithdrawal
+		/* Input: 
+		* accountList- this is a reference to the account object arraylist
+		* ticket- reference to the TransactionTicket object 
+		* receipt- references the TransactionReceipt object
+		* reqAccount- the requested account number
+		* Process:
+		* the program searches for the account using findAccounts
+		* if it doesnt find one, returns an error receipt
+		* otherwise, returns the account index
+		* if the amount is invalid, returns an error
+		* creates a copy account
+		* otherwise it removes the withdrawal amount from the balance
+		* fills out the transaction receipt
+		* sends to bank to reenter the database
+		* Output:
+		* program prints transaction receipt
+		*/
+		Calendar cal= Calendar.getInstance();
+		
+		CheckingAccount temp= new CheckingAccount(accountList.get(index));
+
+
+		if (temp.getStatus().contentEquals("closed")){
+		receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+						temp.getBalance(), temp.getBalance(), ticket.getDate());
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+
+		else if (ticket.getAmount()<=0) {
+		receipt= new TransactionReceipt(ticket, false, "Withdrawal amount must be positive",
+					temp.getBalance(), temp.getBalance(), ticket.getDate());
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+
+		else if(temp.getBalance()<ticket.getAmount()) {
+		receipt= new TransactionReceipt(ticket, false, "Insufficient Funds",
+				temp.getBalance(), temp.getBalance(), ticket.getDate());
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		return receipt= new TransactionReceipt(receipt);}
+
+
+
+		else { temp.setBalance(temp.getBalance()-ticket.getAmount());
+		
+		if (temp.getBalance()<2500) {
+			temp.setBalance(temp.getBalance()-1.50);}
+		
+
+		receipt= new TransactionReceipt(ticket, true, 
+							temp.getBalance()+ticket.getAmount(), 
+							temp.getBalance(), cal);
+
+		temp.addTransaction(receipt);
+		bank.changeDatabase(accountList,index, temp);
+		Bank.totals(bank);
+		return receipt= new TransactionReceipt(receipt);}}
+		
+		public TransactionReceipt clearCheck(Bank bank, ArrayList <Account> accountList,
+				TransactionReceipt receipt, TransactionTicket ticket, 
+				Check check, int index) {
+
+		//Method: Clear Check
+		/* Input: 
+		* bank- this is a reference the the bank object
+		* account- this is a reference to the account object array
+		* ticket- reference to the TransactionTicket object
+		* receipt- reference to the Transaction receipt object
+		* reqAccount- the requested account number
+		* Process:
+		* the program checks to see if the account is valid and a checking account
+		* creates a copy account
+		* Checks the check date to see if it is valid
+		* if so, it checks the withdrawal amount
+		* if the check bounce, it charges a 2.50 service fee
+		* checks if withdrawal amount is valid
+		* if so, subtracts withdrawal amount from the balance
+		* and creates a receipt with the transaction information
+		* returns the receipt to the main method
+		* Output:
+		* program returns transaction receipt
+		*/
+		
+		
+			CheckingAccount temp= new CheckingAccount(accountList.get(index));
+		
+		
+		if (temp.getStatus().contentEquals("closed")){
+				receipt= new TransactionReceipt(ticket, false, "Transaction cannot be carried out on closed account",
+				temp.getBalance(), temp.getBalance(),ticket.getDate());	
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				return receipt= new TransactionReceipt(receipt);}
+		
+		else if(check.getDate().after(ticket.getDate())==true) {
+				receipt= new TransactionReceipt(ticket, false, "Bank cannot process post-dated checks",
+				temp.getBalance(), temp.getBalance(), ticket.getDate());
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				return receipt= new TransactionReceipt(receipt);}
+		
+		else if(check.getDate().get(Calendar.MONTH)+6<ticket.getDate().get(Calendar.MONTH)){
+				receipt= new TransactionReceipt(ticket, false, "Check is more than 6 months old",
+				temp.getBalance(), temp.getBalance(), ticket.getDate());
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				return receipt= new TransactionReceipt(receipt);}
+		
+		else if (check.getAmount()<=0) {
+					receipt= new TransactionReceipt(ticket, false,
+					"Check amount must be greater than zero",
+					temp.getBalance(), temp.getBalance(), ticket.getDate());
+					temp.addTransaction(receipt);
+					bank.changeDatabase(accountList,index, temp);
+					return receipt= new TransactionReceipt(receipt);}
+		
+		else if (check.getAmount()>temp.getBalance()) {
+				ticket= new TransactionTicket(ticket.getDate(), "Clear Check", 2.5);
+				temp.makeWithdrawal(bank, accountList, receipt, ticket,index);
+				receipt= new TransactionReceipt(ticket, false, 
+						"Insufficient Funds", temp.getBalance()+2.5, temp.getBalance(), ticket.getDate());
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				Bank.totals(bank);
+				return receipt= new TransactionReceipt(receipt);}
+		
+		else {
+			if (temp.getBalance()<2500) {
+				temp.setBalance(temp.getBalance()-1.50);}
+		 { temp.makeWithdrawal(bank, accountList,receipt, ticket,index);
+				receipt= new TransactionReceipt(ticket, true, 
+							"Check Cleared", temp.getBalance()+ticket.getAmount(),temp.getBalance(), ticket.getDate());
+				temp.addTransaction(receipt);
+				bank.changeDatabase(accountList,index, temp);
+				Bank.totals(bank);
+				return receipt= new TransactionReceipt(receipt);}}}}
+
+
+		
+
+
