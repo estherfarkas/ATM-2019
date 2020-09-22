@@ -1,0 +1,21 @@
+import java.util.ArrayList;
+
+public abstract class genAccount {
+	private Depositor depositor;
+	private int accountNum;
+	private String accountType;
+	private String status;
+	private double balance;
+	private ArrayList <TransactionReceipt> receiptData;
+
+	protected abstract void setStatus(String input);
+	public abstract int getAccountNum();
+	
+	public abstract String getAccountType();
+	public abstract String getStatus();
+	public abstract Depositor getDepositor();
+	
+	public abstract ArrayList<TransactionReceipt> getHistory();}
+	
+	
+	
